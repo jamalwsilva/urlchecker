@@ -27,10 +27,7 @@ def init_program_options():
 
 
 def request(address, default_port, days_threshold):
-    params = {
-        "addr": (address, default_port),
-    }
-    cert = ssl.get_server_certificate(**params)
+    cert = ssl.get_server_certificate((address, default_port))
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
 
     cname = x509.get_subject().commonName
@@ -54,6 +51,7 @@ def request_urls(addresses, default_port, days_threshold):
         try:
             yield request(address, default_port, days_threshold)    
         except Exception as error:
+            logging.error(error)
             yield {
                 "hostname": address,
                 "error": True,
