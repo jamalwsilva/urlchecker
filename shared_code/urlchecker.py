@@ -11,7 +11,7 @@ import logging
 
 DEFAULT_TIMEOUT = 5
 DEFAULT_PORT = 443
-DEFAULT_DAYS_THRESHOLD = 10
+DEFAULT_DAYS_THRESHOLD = 5
 
 def init_program_options():
     parser = argparse.ArgumentParser(description='Simple Domain Certificate Checker')
