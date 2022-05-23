@@ -27,8 +27,11 @@ def init_program_options():
 
 
 def request(address, default_port, days_threshold):
-    cert = ssl.get_server_certificate((address, default_port))
-    x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
+    conn = ssl.create_connection((address, default_port))
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    sock = context.wrap_socket(conn, server_hostname=address)
+    certificate = ssl.DER_cert_to_PEM_cert(sock.getpeercert(True))
+    x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, certificate)
 
     cname = x509.get_subject().commonName
     not_after = x509.get_notAfter().decode('utf-8')
